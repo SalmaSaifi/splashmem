@@ -7,6 +7,7 @@
 #include "actions.h"
 
 /* !!!!!!!!!!!!!!!! MAP !!!!!!!!!!!!!!!!!!!!! */
+/*code */
 uint8_t mapmem[MAP_SIZE * MAP_SIZE] = {0};
 
 /*  PLAYERS */
