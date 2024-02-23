@@ -10,4 +10,11 @@
 #define P_CREDITS 9000
 #define BOMB_COUNTER 5
 
+/*le cout de chaque mouvement*/
+#define STILL_COST 1
+#define COUT_ACTION_MOVE 1 
+#define COUT_ACTION_DASH 10 
+#define COUT_ACTION_SPLASH 8  
+#define COUT_ACTION_TELEPORT 2    
+
 #endif 

@@ -74,6 +74,10 @@ void main_loop()
                 quitting = 1;
             }
         }
+        for (int i = 0; i < MAX_PLAYERS; i++)
+        {
+            world_do_player_action(players[i]);
+        }
         render_map();
 
         SDL_Delay(100);

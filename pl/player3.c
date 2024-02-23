@@ -1,9 +1,15 @@
 #include "actions.h"
 #include <stdio.h>
-#define MAX_PLAY_ACTION 1
+#define MAX_PLAY_ACTION 8
 
 char play_actions[] = {
-    ACTION_STILL
+    ACTION_TELEPORT_L,
+    ACTION_MOVE_D,
+    ACTION_SPLASH,
+    ACTION_MOVE_D,
+    ACTION_MOVE_R,
+    ACTION_BOMB,
+    ACTION_DASH_R,
 };
 
 char get_action()

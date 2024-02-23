@@ -34,6 +34,7 @@ void world_create_players()
 void world_do_player_action(t_player *p_player)
 {
     // ici du code a qui fonctionne
+    actions_do(p_player, p_player->get_action());
 }
 
 /* ------------------------------------------------------------------------- */
