@@ -14,6 +14,7 @@ typedef struct s_player
     uint32_t y;
     int32_t credits;
     uint32_t count;
+    uint32_t bombs;
     char (*get_action)(); 
 } t_player;
 

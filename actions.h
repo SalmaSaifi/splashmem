@@ -20,7 +20,7 @@ enum action
     ACTION_TELEPORT_D,
     ACTION_SPLASH,
     ACTION_BOMB,
-    ACTION_NUMBER
+    //ACTION_NUMBER
 };
 
 void actions_do(t_player *p_player, enum action act_id);

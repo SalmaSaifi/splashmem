@@ -61,11 +61,13 @@ void render_player()
 /* ------------------------------------------------------------------------- */
 void main_loop()
 {
-    // int is_game_finish = 0;   vous pouvez l'utilisez
+    int is_game_finish = 0;
 
     while (!quitting)
     {
         SDL_Event event;
+        
+        int cpt_inactive  = 0;
 
         while (SDL_PollEvent(&event))
         {
@@ -76,7 +78,18 @@ void main_loop()
         }
         for (int i = 0; i < MAX_PLAYERS; i++)
         {
-            world_do_player_action(players[i]);
+            if(players[i]->credits > 0)
+            {
+                world_do_player_action(players[i]);
+            }
+            else
+            {
+                cpt_inactive++;
+            }
+        }
+        if (cpt_inactive == MAX_PLAYERS)
+        {
+            is_game_finish == 1;
         }
         render_map();
 
