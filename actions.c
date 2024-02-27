@@ -5,7 +5,7 @@
 #include "actions.h"
 #include "world.h"
 
-actions_init()
+void actions_init()
 {
     /* Ajouter du code */
 }
@@ -227,12 +227,39 @@ void actions_do(t_player *p_player, enum action id)
 
         case ACTION_STILL:
             // Pas d'action 
+            p_player->credits -= STILL_COST;
             break;
 
         case ACTION_BOMB:
+        world_paint_spot(p_player->x, p_player->y, p_player->id);
+            for (int b = 0; b < 3; b++)
+            {
+                for (int a = 0; a < 3; a++)
+                {
+                    uint32_t cord_x = p_player->x - 1 + b;
+                    uint32_t cord_y = p_player->y - 1 + a;
 
+                    if (cord_x <= MAP_SIZE && cord_y <= MAP_SIZE)
+                    {
+                        world_paint_spot(cord_x, cord_y, p_player->id);
+                    }
+                    else if (cord_x > MAP_SIZE)
+                    {
+                        cord_x = 1;
+                        world_paint_spot(cord_x, cord_y, p_player->id);
+                    }
+                    else if (cord_y > MAP_SIZE)
+                    {
+                        cord_y = 1;
+                        world_paint_spot(cord_x, cord_y, p_player->id);
+                    }
+                }
+            }
+            p_player->bombs --;
+            p_player->credits -= COUT_ACTION_BOMB;
             break;
 
-        } 
+        }
+        p_player->count++; 
     }
 }
