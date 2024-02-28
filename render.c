@@ -67,7 +67,7 @@ void main_loop()
     {
         SDL_Event event;
         
-        int cpt_inactive  = 0;
+        int cpt_inactive = 0;
 
         while (SDL_PollEvent(&event))
         {
@@ -85,6 +85,13 @@ void main_loop()
             else
             {
                 cpt_inactive++;
+            }
+            for (int j = 0; j < BOMB_COUNTER * MAX_PLAYERS; j++)
+            {
+                if ((players[i]->count - bombs[j]->rounds==5) && (bombs[j]->rounds != -1))
+                {
+                    world_bomb_explosion(bombs[j]);
+                }
             }
         }
         if (cpt_inactive == MAX_PLAYERS)

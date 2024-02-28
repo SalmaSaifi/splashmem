@@ -53,6 +53,7 @@ void inits(int argc, char *argv[])
 
     actions_init();
     world_create_players();
+    world_create_bombs();
 
     //Recuperer les references 
 
