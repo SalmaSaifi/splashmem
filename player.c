@@ -20,3 +20,11 @@ void player_init(t_player* p_player, uint8_t num)
     p_player->bombs = BOMB_COUNTER;
 }
 
+void bombs_init(t_bomb* b_bomb, uint8_t i, uint8_t j)
+{
+    b_bomb->id = i*BOMB_COUNTER + j + 1;
+    b_bomb->player_id = i + 1;
+    b_bomb->x = 0;
+    b_bomb->y = 0;
+    b_bomb->rounds = -1;
+}
