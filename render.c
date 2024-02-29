@@ -96,10 +96,11 @@ void main_loop()
         }
         if (cpt_inactive == MAX_PLAYERS)
         {
-            is_game_finish == 1;
+            is_game_finish = 1;
+            quitting = 1;
         }
         render_map();
 
-        SDL_Delay(100);
+        SDL_Delay(20);
     }
 }

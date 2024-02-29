@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
 
     SDL_DelEventWatch(watch, NULL);
     SDL_DestroyWindow(window);
+    world_set_game_finish();
     SDL_Quit();
 
     exit(0);

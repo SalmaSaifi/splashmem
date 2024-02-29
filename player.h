@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+extern int start_pos_x[];
+extern int start_pos_y[];
+
 typedef struct s_player
 {
     /* data */
@@ -15,6 +18,10 @@ typedef struct s_player
     int32_t credits;
     uint32_t count;
     uint32_t bombs;
+    uint8_t color_r;
+    uint8_t color_g;
+    uint8_t color_b;
+    uint32_t score;
     char (*get_action)(); 
 } t_player;
 
