@@ -2,7 +2,7 @@
 SRCS=$(wildcard *.c)
 OBJS=$(SRCS:.c=.o)
 CFLAGS= -Wall -g2 -fPIC  # -DDEBUG
-LDFLAGS= -ldl -lSDL2
+LDFLAGS= -ldl -lSDL2 -lSDL2_ttf
 EXE=splash
 
 all: players $(OBJS)
@@ -19,7 +19,7 @@ clean_all: clean
 	cd pl && $(MAKE) clean
 
 tp5: $(OBJS)
-	gcc  $(OBJS) -ldl -lSDL2 -lsplash -o $(EXE)
+	gcc  $(OBJS) -ldl -lSDL2 -lSDL2_ttf -lsplash -o $(EXE)
 
 liba: $(OBJS)
 	ar crs libsplash.a actions.o player.o world.o render.o bomb.o

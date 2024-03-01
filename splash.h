@@ -5,7 +5,7 @@ extern SDL_Window *window;
 extern SDL_Surface *screenSurface;
 extern uint32_t colors[];
 extern int quitting;
-
+extern int SDLCALL watch(void *userdata, SDL_Event *event);
 /**
  * @brief init the color palette
  *

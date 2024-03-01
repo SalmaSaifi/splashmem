@@ -18,6 +18,7 @@ void player_init(t_player* p_player, uint8_t num)
     p_player->credits = P_CREDITS;
     p_player->count = 0;
     p_player->bombs = BOMB_COUNTER;
+    p_player->score = 0;
 }
 
 void bombs_init(t_bomb* b_bomb, uint8_t i, uint8_t j)

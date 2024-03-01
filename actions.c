@@ -251,6 +251,7 @@ void actions_do(t_player *p_player, enum action id)
         // Pas d'action
         if (p_player->credits >= STILL_COST)
         { 
+            world_paint_spot(p_player->x, p_player->y, p_player->id);
             p_player->credits -= STILL_COST;
         }
 
