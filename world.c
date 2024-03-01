@@ -51,7 +51,6 @@ void world_create_bombs()
             bombs[i*BOMB_COUNTER+j]->x = 0;
             bombs[i*BOMB_COUNTER+j]->y = 0;
             bombs[i*BOMB_COUNTER+j]->rounds = -1;
-            //bombs_init(bombs[i*BOMB_COUNTER + j], i, j);
         }
     }
 }
@@ -92,7 +91,7 @@ int world_get_winner()
     uint8_t winner = 0;
     for (int k = 1; k < MAX_PLAYERS; k++)
     {
-        if (players[k]->score > players[k - 1]->score)
+        if (players[k]->score > players[winner]->score)
         {
             winner = k;
         }
@@ -103,10 +102,6 @@ int world_get_winner()
         printf("%d\n", players[l]->score);
     }
     return winner;
-    // créer un tableau de nb_joueurs cases
-    // faire une boucle qui va venir compter le nb de case de la couleur de chaque joueur
-    // tester quel joueur à le plus de cases coloriées
-    // ici du code a qui fonctionne
 }
 
 /* ------------------------------------------------------------------------- */
@@ -153,7 +148,7 @@ void world_bomb_explosion(t_bomb *p_bomb)
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* ------------------------------------------------------------------------- */
-void world_set_game_finish()
+int world_set_game_finish()
 {
     uint8_t winner = world_get_winner();
     int start_pos_x[] = {MAP_SIZE/4, MAP_SIZE/4, MAP_SIZE*3/4, MAP_SIZE*3/4};
@@ -161,37 +156,85 @@ void world_set_game_finish()
     quitting = 0;
     SDL_Window *window = NULL;
 
-    window = SDL_CreateWindow("SplashMem", SDL_WINDOWPOS_UNDEFINED,
+    window = SDL_CreateWindow("SplashMem - Résultats", SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED, WIN_SIZE, WIN_SIZE,
                               SDL_WINDOW_SHOWN);
 
     SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_AddEventWatch(watch, NULL);
+    SDL_Event event;
     while (!quitting)
     {
-        SDL_Event event;
-        
-        int cpt_inactive = 0;
-
-        while (SDL_PollEvent(&event))
+        SDL_WaitEvent(&event);
+        switch(event.type)
         {
-            if (event.type == SDL_QUIT)
+            case SDL_QUIT:
             {
                 quitting = 1;
             }
+            case SDL_KEYDOWN:
+            {
+                SDL_Log("Touche enfoncée");
+                if(event.key.keysym.sym == SDLK_r)
+                {
+                    SDL_Log("Touche R appuyée");
+                    for (int i = 0; i < MAP_SIZE * MAP_SIZE; i++)
+                    {
+                        mapmem[i] = 0;
+                    }
+                    for (int i = 0; i < MAX_PLAYERS; i++)
+                    {
+                        player_init(players[i], i);
+                    }
+                    return 0;
+                }
+                if(event.key.keysym.sym == SDLK_q)
+                {
+                    quitting = 1;
+                    SDL_Log("Touche Q appuyée");
+                }
+            }
         }
+
         if (TTF_Init() != 0)
         {
             fprintf(stderr, "Erreur d'initialisation TTF : %s\n", TTF_GetError()); 
         }
-        TTF_Font * font1;
-        font1 = TTF_OpenFont("arial.ttf", 72); 
+        TTF_Font * font;
+        font = TTF_OpenFont("arial.ttf", 72); 
+        
+        // Détermination du gagnant
         char win[50] = "Le gagnant est le joueur ";
-        //char gagnant[50] = strcat("Le gagnant est le joueur ", (winner + 1));
         char gagnant[10];
         sprintf(gagnant, "%d", (winner + 1));
         strcat(win, gagnant);
+
+        // Affichage du gagnant
         SDL_Color first = {0xFF, 0xFF, 0xFF};
+        SDL_Rect premier;
+        premier.x = SQUARE_SIZE/2;
+        premier.y = SQUARE_SIZE/10;
+        premier.w = MAP_SIZE * SQUARE_SIZE;
+        premier.h = 100;
+        SDL_Surface *text = TTF_RenderText_Blended(font, win, first);
+        SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, text);
+        SDL_RenderCopy(renderer, texture, NULL, &premier);
+        SDL_DestroyTexture(texture);
+        SDL_FreeSurface(text);
+
+        // Affichage des touches pour relancer ou quitter le jeu
+        SDL_Rect controls;
+        controls.x = SQUARE_SIZE/2;
+        controls.y = (8 * (MAP_SIZE *SQUARE_SIZE)/10);
+        controls.w = MAP_SIZE * SQUARE_SIZE;
+        controls.h = 100;
+        SDL_Surface *control = TTF_RenderText_Blended(font, "Relancer une partie (R) / Quitter le jeu(Q)", first);
+        SDL_Texture *texture2 = SDL_CreateTextureFromSurface(renderer, control);
+        SDL_RenderCopy(renderer, texture2, NULL, &controls);
+        SDL_DestroyTexture(texture2);
+        SDL_FreeSurface(control);
+
+        // Couleur du score pour chaque joueur
         SDL_Color color[4];
         color[0].r = 0xFF;
         color[0].g = 0;
@@ -206,39 +249,27 @@ void world_set_game_finish()
         color[3].g = 0;
         color[3].b = 0xFF;
 
-        SDL_Rect premier;
-        premier.x = SQUARE_SIZE/2;
-        premier.y = SQUARE_SIZE/10;
-        premier.w = 100;
-        premier.h = 100;
-        SDL_Surface *test = TTF_RenderText_Blended(font1, gagnant, first);
-        SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, test);
-        SDL_RenderCopy(renderer, texture, NULL, &premier);
-        SDL_DestroyTexture(texture);
-        SDL_FreeSurface(test);
+        // Affichage du score de chaque joueur
         for (int i = 0; i < 4; i++)
         {
             SDL_Rect score[i];
-            score[i].x = start_pos_x[i]*SQUARE_SIZE;
-            score[i].y = start_pos_y[i]*SQUARE_SIZE;
+            score[i].x = start_pos_x[i]*SQUARE_SIZE - 50;
+            score[i].y = start_pos_y[i]*SQUARE_SIZE - 50;
             score[i].w = 100;
             score[i].h = 100;
-            //char *player_score = (char *)malloc(sizeof(players[i]->score));
-            //char *player_score = (char *) &(players[i]->score);
             char player_score[10];
             sprintf(player_score, "%d", players[i]->score);
-            // printf("%s\n", player_score);
-            SDL_Surface *test = TTF_RenderText_Blended(font1, player_score, color[i]);
-            SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, test);
+            SDL_Surface *text = TTF_RenderText_Blended(font, player_score, color[i]);
+            SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, text);
             SDL_RenderCopy(renderer, texture, NULL, &score[i]);
             SDL_DestroyTexture(texture);
-            SDL_FreeSurface(test);
+            SDL_FreeSurface(text);
         }
-        //SDL_RenderCopy(renderer, texture, NULL, NULL);
-        TTF_CloseFont(font1);
+        TTF_CloseFont(font);
         SDL_RenderPresent(renderer);
     }
     SDL_DelEventWatch(watch, NULL);
     SDL_DestroyWindow(window);
     
+    return 1;
 }

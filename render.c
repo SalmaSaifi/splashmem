@@ -61,7 +61,6 @@ void render_player()
 /* ------------------------------------------------------------------------- */
 void main_loop()
 {
-    int is_game_finish = 0;
 
     while (!quitting)
     {
@@ -96,7 +95,6 @@ void main_loop()
         }
         if (cpt_inactive == MAX_PLAYERS)
         {
-            is_game_finish = 1;
             quitting = 1;
         }
         render_map();

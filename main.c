@@ -31,30 +31,36 @@ int SDLCALL watch(void *userdata, SDL_Event *event)
 /* ------------------------------------------------------------------------- */
 int main(int argc, char *argv[])
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
+    int end = 0;
+    while (!end)
     {
-        SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
-        return 1;
+        window = NULL;
+        screenSurface = NULL;
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
+        {
+            SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
+            return 1;
+        }
+
+        window = SDL_CreateWindow("SplashMem", SDL_WINDOWPOS_UNDEFINED,
+                                SDL_WINDOWPOS_UNDEFINED, WIN_SIZE, WIN_SIZE,
+                                SDL_WINDOW_SHOWN);
+        SDL_AddEventWatch(watch, NULL);
+
+        if (argc != 5)
+        {
+            printf("Wrong argument number\n");
+            return 1;
+        }
+        inits(argc, argv);
+
+        main_loop();
+
+        SDL_DelEventWatch(watch, NULL);
+        SDL_DestroyWindow(window);
+        end = world_set_game_finish();
+        SDL_Quit();
     }
-
-    window = SDL_CreateWindow("SplashMem", SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED, WIN_SIZE, WIN_SIZE,
-                              SDL_WINDOW_SHOWN);
-    SDL_AddEventWatch(watch, NULL);
-
-    if (argc != 5)
-    {
-        printf("Wrong argument number\n");
-        return 1;
-    }
-    inits(argc, argv);
-
-    main_loop();
-
-    SDL_DelEventWatch(watch, NULL);
-    SDL_DestroyWindow(window);
-    world_set_game_finish();
-    SDL_Quit();
 
     exit(0);
 

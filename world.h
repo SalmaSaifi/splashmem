@@ -17,6 +17,6 @@ void world_create_bombs();
 void world_set_bomb(t_player *p_player);
 void world_bomb_explosion(t_bomb *p_bomb);
 void bombs_init(t_bomb* b_bomb, uint8_t i, uint8_t j);
-void world_set_game_finish();
+int world_set_game_finish();
 
 #endif 
